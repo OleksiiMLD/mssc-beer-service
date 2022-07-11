@@ -2,6 +2,8 @@ package guru.springframework.msscbeerservice.bootstrap;
 
 import guru.springframework.msscbeerservice.domain.Beer;
 import guru.springframework.msscbeerservice.repositories.BeerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,7 @@ import java.math.BigDecimal;
  */
 @Component
 public class BeerLoader implements CommandLineRunner {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BeerLoader.class);
 
     private final BeerRepository beerRepository;
 
@@ -25,7 +28,9 @@ public class BeerLoader implements CommandLineRunner {
     }
 
     private void loadBeerObjects() {
+        LOGGER.warn("In loadBeerObjects");
         if(beerRepository.count() == 0){
+            LOGGER.warn("save objects");
 
             beerRepository.save(Beer.builder()
                     .beerName("Mango Bobs")
