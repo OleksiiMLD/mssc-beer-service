@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -83,6 +84,13 @@ public class BeerServiceImpl implements BeerService {
                     beerRepository.findById(beerId).orElseThrow(NotFoundException::new)
             );
         }
+    }
+
+    @Cacheable(cacheNames = "beerCache", key = "#upc", condition = "#showInventoryOnHand == false ")
+    @Override
+    public BeerDto getByUpc(String upc, @NotNull Boolean showInventoryOnHand) {
+        Beer beer = beerRepository.findByUpc(upc).orElseThrow(NotFoundException::new);
+        return showInventoryOnHand ? beerMapper.beerToBeerDtoWithInventory(beer) : beerMapper.beerToBeerDto(beer);
     }
 
     @Override
