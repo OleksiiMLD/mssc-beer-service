@@ -15,10 +15,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class ValidateBeerOrderResult implements Serializable {
+public class ValidateOrderResult implements Serializable {
 
     private static final long serialVersionUID = 5878866583517240606L;
 
     private UUID orderId;
-    private boolean isValid;
+    private Boolean valid;
 }

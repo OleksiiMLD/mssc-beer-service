@@ -1,8 +1,8 @@
 package guru.springframework.msscbeerservice.services.order;
 
 import guru.sfg.brewery.model.BeerOrderDto;
-import guru.sfg.brewery.model.events.ValidateBeerOrderRequest;
-import guru.sfg.brewery.model.events.ValidateBeerOrderResult;
+import guru.sfg.brewery.model.events.ValidateOrderRequest;
+import guru.sfg.brewery.model.events.ValidateOrderResult;
 import guru.springframework.msscbeerservice.config.JmsConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,17 +27,17 @@ public class BeerOrderListener {
     private final BeerOrderValidator validator;
 
     @JmsListener(destination = JmsConfig.VALIDATE_ORDER_QUEUE)
-    public void listenValidateOrder(@Payload ValidateBeerOrderRequest validateBeerOrderRequest,
+    public void listenValidateOrder(@Payload ValidateOrderRequest validateBeerOrderRequest,
                                     @Headers MessageHeaders headers, Message message) {
         log.info("Process order validation");
-        BeerOrderDto beerOrderDto = validateBeerOrderRequest.getBeerOrderDto();
+        BeerOrderDto beerOrderDto = validateBeerOrderRequest.getBeerOrder();
 
-        boolean invalid = validator.validate(beerOrderDto);
+        boolean isValid = validator.validate(beerOrderDto);
 
-        ValidateBeerOrderResult payloadMsg = ValidateBeerOrderResult
+        ValidateOrderResult payloadMsg = ValidateOrderResult
                 .builder()
                 .orderId(beerOrderDto.getId())
-                .isValid(invalid)
+                .valid(isValid)
                 .build();
         jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_RESULT_QUEUE, payloadMsg);
     }

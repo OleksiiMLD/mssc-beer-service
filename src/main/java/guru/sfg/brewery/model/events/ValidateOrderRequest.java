@@ -15,9 +15,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class ValidateBeerOrderRequest implements Serializable {
+public class ValidateOrderRequest implements Serializable {
 
     private static final long serialVersionUID = 2386148795903676664L;
 
-    private BeerOrderDto beerOrderDto;
+    private BeerOrderDto beerOrder;
 }
